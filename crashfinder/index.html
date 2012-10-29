@@ -42,17 +42,22 @@
   <ul>
     <li>
   		<h5>Work</h5>
-  		<p>Refactr</p>
+  		<p><a href="http://www.refactr.com" target="_blank">Refactr</a></p>
   	</li>
     <li>
   		<h5>Twitter</h5>
-  		<p>@lbredeso</p>
+  		<p><a href="https://twitter.com/lbredeso" target="_blank">@lbredeso</a></p>
   	</li>
+    <li>
+      <h5>Github</h5>
+      <p><a href="https://github.com/lbredeso" target="_blank">https://github.com/lbredeso</a></p>
+    </li>
   </ul>
 </section>
 
 <section class="slide">
   <h2>Introduction</h2>
+  <h5>How I built <a href="http://crashfinder.org" target="_blank">crashfinder.org</a></h5>
 </section>
 
 <section class="slide">
@@ -76,8 +81,9 @@
   <h4>Use an existing tool</h4>
   <ul>
     <li class="slide">
-  		<p>...</p>
-  	</li>
+      <p><a href="http://www.dot.state.mn.us/maps/gisweb" target="_blank">http://www.dot.state.mn.us/maps/gisweb</a></p>
+      <img src="images/mn-dot-basemap.png" alt="MN DOT BaseMap">
+    </li>
   </ul>
 </section>
 
@@ -86,7 +92,7 @@
   <h4>Ask someone</h4>
   <ul>
     <li class="slide">
-  		<p>Three other intersections have priority</p>
+  		<p>Public Works says three other intersections have priority</p>
   	</li>
     <li class="slide">
   		<p>Because...?</p>
@@ -108,6 +114,9 @@
       <p><s>OpenStreetMap</s> Google Maps</p>
     </li>
     <li class="slide">
+      <p><s>CouchDB</s> MongoDB</p>
+    </li>
+    <li class="slide">
   		<p>Yet to be obtained crash data</p>
   	</li>
   </ul>
@@ -116,28 +125,28 @@
 <section class="slide">
 	<h2>Minnesota Government Data Practices Act</h2>
   <h4><a href="http://www.house.leg.state.mn.us/hrd/pubs/dataprac.pdf" target="_blank">http://www.house.leg.state.mn.us/hrd/pubs/dataprac.pdf</a></h4>
-  <h4 class="slide">IANAL, but...</h4>
-  <h5 class="slide">If you are:</h5>
+  <h5>(IANAL, but...)</h5>
+  <h5>If you are:</h5>
   <ul>
-    <li class="slide">
+    <li>
   		<p>A state agency, the U of M, or under contract to a government entity</p>
   	</li>
   </ul>
-  <h5 class="slide">But are not:</h5>
+  <h5>But are not:</h5>
   <ul>
-    <li class="slide">
+    <li>
   		<p>The judicial branch (they have their own data rules)</p>
   	</li>
-    <li class="slide">
+    <li>
   		<p>The legislature itself</p>
   	</li>
   </ul>
-  <h5 class="slide">Then:</h5>
+  <h5>Then:</h5>
   <ul>
-    <li class="slide">
+    <li>
   		<p>You need a Data Practices Compliance Official</p>
   	</li>
-    <li class="slide">
+    <li>
   		<p>You need to provide allowed (not private or confidential) data, without identitifcation or justification, to whoever requests it, in a "conveniently accessible" form.</p>
   	</li>
   </ul>
@@ -202,7 +211,7 @@ B=MODERATE INJURY CRASH
   <ul>
     <li>
       <p>Field layouts</p>
-      <p><strong>v1</strong> (1997-2002)</p>
+      <p><strong>v1</strong> (1991-2002)</p>
       <pre>
         <code>
 @46    ACCDATE  MMDDYY10. 
@@ -237,7 +246,7 @@ B=MODERATE INJURY CRASH
 <section class="slide">
   <h2>Where's the latitude and longitude?</h2>
   <h4 class="slide">Nowhere</h4>
-  <h4 class="slide">Many emails with Minnesota DOT later, found out that I need either:</h4>
+  <h4 class="slide">Many emails with Minnesota DPS/DOT later, found out that I need either:</h4>
   <ul>
     <li class="slide">
       ESRI ArcGIS (DOT uses this)
@@ -260,6 +269,11 @@ B=MODERATE INJURY CRASH
   		<p>Shapefiles - <a href="http://www.dot.state.mn.us/maps/gisbase/html/county_text.html" target="_blank">http://www.dot.state.mn.us/maps/gisbase/html/county_text.html</a></p>
   	</li>
   </ul>
+</section>
+
+<section class="slide">
+  <h2>I need help</h2>
+  <h5><a href="http://gis.stackexchange.com" target="_blank">http://gis.stackexchange.com</a></h5>
 </section>
 
 <section class="slide">
@@ -316,11 +330,6 @@ road_id   | 0462000031
 distance  | 6.335
     </code>
   </pre>
-</section>
-
-<section class="slide">
-  <h2>I need help</h2>
-  <h5><a href="http://gis.stackexchange.com" target="_blank">http://gis.stackexchange.com</a></h5>
 </section>
 
 <section class="slide">
@@ -765,12 +774,7 @@ ruby "1.9.3", :engine => "jruby", :engine_version => "1.7.0"
 </section>
 
 <section class="slide">
-  <h2><s>BrowserID</s> Persona</h2>
-  <ul>
-    <li>
-      <p></p>
-    </li>
-  </ul>
+  <h2>Questions?</h2>
 </section>
 
 <!-- End slides. -->
