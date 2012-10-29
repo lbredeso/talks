@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+
+	<title>Crash Finder:  Solving Problems with Government Data</title>
+	
+	<!-- Required stylesheet -->
+	<link rel="stylesheet" href="core/deck.core.css">
+	
+	<!-- Extension CSS files go here. Remove or add as needed. -->
+	<link rel="stylesheet" href="extensions/goto/deck.goto.css">
+	<link rel="stylesheet" href="extensions/menu/deck.menu.css">
+	<link rel="stylesheet" href="extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="extensions/status/deck.status.css">
+	<link rel="stylesheet" href="extensions/hash/deck.hash.css">
+	<link rel="stylesheet" href="extensions/scale/deck.scale.css">
+
+	<!-- Style theme. More available in /themes/style/ or create your own. -->
+	<link rel="stylesheet" href="themes/style/web-2.0.css">
+	
+	<!-- Transition theme. More available in /themes/transition/ or create your own. -->
+	<link rel="stylesheet" href="themes/transition/horizontal-slide.css">
+	
+	<!-- Required Modernizr file -->
+	<script src="modernizr.custom.js"></script>
+</head>
+<body class="deck-container">
+
+<!-- Begin slides. Just make elements with a class of slide. -->
+
+<section class="slide">
+	<h2>Crash Finder:  A Case Study in Government Data Problem Solving</h2>
+  <h4>October 29th, 2012</h4>
+</section>
+
+<section class="slide">
+	<h2>Who am I?</h2>
+  <h4>Luke Bredeson</h4>
+  <ul>
+    <li>
+  		<h5>Work</h5>
+  		<p>Refactr</p>
+  	</li>
+    <li>
+  		<h5>Twitter</h5>
+  		<p>@lbredeso</p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Introduction</h2>
+</section>
+
+<section class="slide">
+	<h2>My Problem</h2>
+  <h4>Too many crashes</h4>
+  <ul>
+    <li>
+  		<p>How many?</p>
+  	</li>
+    <li>
+  		<p>When?</p>
+  	</li>
+    <li>
+  		<p>Better or worse over time?</p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+	<h2>Solution #1</h2>
+  <h4>Use an existing tool</h4>
+  <ul>
+    <li class="slide">
+  		<p>...</p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+	<h2>Solution #2</h2>
+  <h4>Ask someone</h4>
+  <ul>
+    <li class="slide">
+  		<p>Three other intersections have priority</p>
+  	</li>
+    <li class="slide">
+  		<p>Because...?</p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+	<h2>Solution #3</h2>
+  <h4>Build it myself, with:</h4>
+  <ul>
+    <li class="slide">
+  		<p>Ruby</p>
+  	</li>
+    <li class="slide">
+  		<p>Rails</p>
+  	</li>
+    <li class="slide">
+      <p><s>OpenStreetMap</s> Google Maps</p>
+    </li>
+    <li class="slide">
+  		<p>Yet to be obtained crash data</p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+	<h2>Minnesota Government Data Practices Act</h2>
+  <h4><a href="http://www.house.leg.state.mn.us/hrd/pubs/dataprac.pdf" target="_blank">http://www.house.leg.state.mn.us/hrd/pubs/dataprac.pdf</a></h4>
+  <h4 class="slide">IANAL, but...</h4>
+  <h5 class="slide">If you are:</h5>
+  <ul>
+    <li class="slide">
+  		<p>A state agency, the U of M, or under contract to a government entity</p>
+  	</li>
+  </ul>
+  <h5 class="slide">But are not:</h5>
+  <ul>
+    <li class="slide">
+  		<p>The judicial branch (they have their own data rules)</p>
+  	</li>
+    <li class="slide">
+  		<p>The legislature itself</p>
+  	</li>
+  </ul>
+  <h5 class="slide">Then:</h5>
+  <ul>
+    <li class="slide">
+  		<p>You need a Data Practices Compliance Official</p>
+  	</li>
+    <li class="slide">
+  		<p>You need to provide allowed (not private or confidential) data, without identitifcation or justification, to whoever requests it, in a "conveniently accessible" form.</p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Minnesota DPS sent me this:</h2>
+  <img src="images/mn-crash-data-2004-2010.jpg" alt="Crash Data">
+  <h4>(With Crash, Person, and Vehicle files for each year)</h4>
+</section>
+
+<section class="slide">
+  <h2>A short sample</h2>
+  <h4>Layout</h4>
+  <pre>
+    <code>
+@46    ACCDATE  MMDDYY10. 
+@45    ACCDAY   Z1.0                                    
+@6     ACCN     $13.     
+@179   ACCSEV   $1.                                           
+@56    ACCTIM2  $4.                                           
+@92    ACCTYPE  Z2.0
+...
+    </code>
+  </pre>
+  <h5>Code guide</h5>
+  <pre>
+    <code>
+ACCDATE (Crash Date)
+Format mmddyy10.
+(CRASH LEVEL)
+
+ACCDAY (Day of Crash)
+(CRASH LEVEL)
+1=SUNDAY
+2=MONDAY
+3=TUESDAY 
+...
+
+$ACCN (Crash Number)
+(CRASH/VEH/PER LEVELS)
+
+$ACCSEV (Crash Severity)
+(CRASH LEVEL)
+K=FATAL CRASH
+A=SEVERE INJURY CRASH 
+B=MODERATE INJURY CRASH
+...
+    </code>
+  </pre>
+  <h4>Data (by year)</h4>
+  <pre>
+    <code>
+5408 1100100082011      11-000111   NY010000701/01/2011011127C2585                         260301N9898N08059098980230900004Y070310102585161200000260  Y             27258500000260N000019038261813
+...
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Approach</h2>
+  <ul>
+    <li>
+      <p>Field layouts</p>
+      <p><strong>v1</strong> (1997-2002)</p>
+      <pre>
+        <code>
+@46    ACCDATE  MMDDYY10. 
+@45    ACCDAY   Z1.0                                    
+@6     ACCN     $13.     
+@179   ACCSEV   $1.                                           
+@56    ACCHOUR  Z2.0                                           
+@92    ACCTYPE  Z2.0
+...
+        </code>
+      </pre>
+      <p><strong>v2</strong> (2004-2011)</p>
+      <pre>
+        <code>
+@46    ACCDATE  MMDDYY10. 
+@45    ACCDAY   Z1.0                                    
+@6     ACCN     $13.     
+@179   ACCSEV   $1.                                           
+@56    ACCTIM2  $4.                                           
+@92    ACCTYPE  Z2.0
+...
+        </code>
+      </pre>
+    </li>
+    <li>
+      <p>Crash converters</p>
+      <p><a href="http://www.ruby-doc.org/core-1.9.3/String.html#method-i-unpack" target="_blank">String.unpack</a></p>
+    </li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Where's the latitude and longitude?</h2>
+  <h4 class="slide">Nowhere</h4>
+  <h4 class="slide">Many emails with Minnesota DOT later, found out that I need either:</h4>
+  <ul>
+    <li class="slide">
+      ESRI ArcGIS (DOT uses this)
+    </li>
+  </ul>
+  <h4 class="slide">
+    or...
+  </h4>
+  <ul>
+    <li class="slide">
+  		<p>LOCREL 1-3 (1=HIGH CONFIDENCE, 2=MEDIUM COFIDNCE, 3=LOW CONFIDENCE, 4=UNCERTAIN)</p>
+  	</li>
+    <li class="slide">
+  		<p>Mile point</p>
+  	</li>
+    <li class="slide">
+  		<p>Route ID</p>
+  	</li>
+    <li class="slide">
+  		<p>Shapefiles - <a href="http://www.dot.state.mn.us/maps/gisbase/html/county_text.html" target="_blank">http://www.dot.state.mn.us/maps/gisbase/html/county_text.html</a></p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>PostGIS</h1>
+</section>
+
+<section class="slide">
+  <h2>Put the shapefiles into a table</h2>
+  <h5>
+    <a href="http://postgis.refractions.net/documentation/manual-1.3/ch04.html" target="_blank">shp2pgsql</a>
+  </h5>
+  <ul>
+    <li>
+      <p>Converts ESRI Shape files into SQL suitable for insertion into a PostGIS/PostgreSQL database</p>
+    </li>
+  </ul>
+  <pre>
+    <code>
+gid        | 718823
+str_name   | E Maryland Ave
+str_pfx    | E
+base_nam   | Maryland
+str_type   | Ave
+str_sfx    | 
+e_911      | U
+tis_code   | 0462000031
+rte_syst   | 04
+rte_num    | 31
+divid      | M
+traf_dir   | D
+tis_one    | 
+status     | A
+date_pro   | 
+date_act   | 2008-01-01
+date_ret   | 
+date_edt   | 2008-02-01
+shape_leng | 88.2135312648
+begm       | 4.075
+endm       | 4
+cnty_code  | 62
+directiona | 0462000031-D
+the_geom   | 0105000060400D030001000000010200004003000000D076BE1F471A1E41B29DEFDFB5FF52410000075F984C104010583934E5191E41AC1C5A94B6FF524100C08AFD6537104030894160E7181E41000000A0B5FF52410000000000001040
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Put the crashes into a table</h2>
+  <pre>
+    <code>
+id        | 2806866
+unique_id | MN-0904300482009
+road_id   | 0462000031
+distance  | 6.335
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>I need help</h2>
+  <h5><a href="http://gis.stackexchange.com" target="_blank">http://gis.stackexchange.com</a></h5>
+</section>
+
+<section class="slide">
+  <h2>Some helpful PostGIS functions</h2>
+  <h5 class="slide">
+    <a href="http://postgis.org/docs/ST_Transform.html" target="_blank">geometry ST_Transform(geometry g1, integer srid);</a>
+  </h5>
+  <ul>
+    <li class="slide">
+  		<p>Returns a new geometry with its coordinates transformed to spatial reference system referenced by the SRID integer parameter</p>
+  	</li>
+    <li class="slide">
+      <p>Used an SRID of <a href="http://spatialreference.org/ref/epsg/4326/" target="_blank">4326</a></p>
+  </ul>
+  <h5 class="slide">
+    <a href="http://postgis.refractions.net/docs/ST_Line_Interpolate_Point.html" target="_blank">geometry ST_Line_Interpolate_Point(geometry a_linestring, float a_fraction);</a>
+  </h5>
+  <ul>
+    <li class="slide">
+  		<p>Returns a point interpolated along a line</p>
+  	</li>
+  </ul>
+  <h5 class="slide">
+    <a href="http://www.postgis.org/docs/ST_X.html" target="_blank">float ST_X(geometry a_point);</a>
+  </h5>
+  <ul>
+    <li class="slide">
+  		<p>Return the X coordinate of the point, or NULL if not available</p>
+  	</li>
+  </ul>
+  <h5 class="slide">
+    <a href="http://www.postgis.org/docs/ST_Y.html" target="_blank">float ST_Y(geometry a_point);</a>
+  </h5>
+  <ul>
+    <li class="slide">
+  		<p>Return the Y coordinate of the point, or NULL if not available</p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>"The Query"</h2>
+  <pre>
+    <code>
+select id, st_x(point) as longitude, st_y(point) as latitude from 
+  (
+    select st_line_interpolate_point(
+      st_transform(geometryn(roads.the_geom, 1), 4326), 
+      (events.distance - least(roads.begm, roads.endm)) / greatest((@ roads.endm - roads.begm), 0.0000001)
+    ) as point, events.id
+    from events
+    inner join roads on
+      events.road_id = roads.tis_code and
+      roads.the_geom is not null and
+      roads.traf_dir in ('B', 'I') and
+      roads.shape_leng > 0.0
+    where
+      events.longitude is null and
+      events.latitude is null and
+      events.distance > roads.begm and events.distance < roads.endm
+    order by
+      events.id
+  ) as event order by event.id;
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Success!</h2>
+  <pre>
+    <code>
+id        | 2806866
+unique_id | MN-0904300482009
+road_id   | 0462000031
+distance  | 6.335
+latitude  | 44.9775608967503
+longitude | -93.040428859231
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>MongoDB</h2>
+  <ul>
+    <li>
+  		<p>Built-in geospatial features</p>
+  	</li>
+    <li>
+  		<p>Fast</p>
+  	</li>
+    <li>
+  		<p>Map Reduce output to collections</p>
+  	</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Too many markers</h2>
+  <img src="images/google-maps-copious-data1.png" alt="Too many markers">
+</section>
+
+<section class="slide">
+  <h2>Google's advice</h2>
+  <h4>
+    <a href="https://developers.google.com/maps/articles/toomanymarkers" target="_blank">
+      https://developers.google.com/maps/articles/toomanymarkers
+    </a>
+  </h4>
+  <ul>
+    <li>
+      <s><p>Frontend marker clustering</p></s>
+    </li>
+    <li>
+      <s><p>Flash</p></s>
+    </li>
+    <li>
+      <s><p>Fusion Tables</p></s>
+    </li>
+    <li>
+      <p>Viewport Marker Management (i.e. use a bounding box)</p>
+      <pre>
+        <code>
+google.maps.event.addListener(map, 'idle', function() {
+  var zoom = map.getZoom();
+  var sw = map.getBounds().getSouthWest();
+  var ne = map.getBounds().getNorthEast();
+  
+  $.ajax({
+    url: "/clusters" + "?year=2011" + "&zoom=" + zoom +
+      "&sw_lat=" + sw.lat() + "&sw_lng=" + sw.lng() + "&ne_lat=" + ne.lat() + "&ne_lng=" + ne.lng(),
+    dataType: 'json'
+    ...
+  });
+  ...
+});
+        </code>
+      </pre>
+    </li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Server side clustering</h2>
+  <h5>
+    <a href="http://www.appelsiini.net/2008/11/introduction-to-marker-clustering-with-google-maps" target="_blank">
+      http://www.appelsiini.net/2008/11/introduction-to-marker-clustering-with-google-maps
+    </a>
+  </h5>
+  <ul>
+    <li>
+  		<p>Crashes clustered by year and zoom level</p>
+  	</li>
+    <li>
+  		<p>Generating them is currently a little slow:  2.5 hours</p>
+      <ul>
+        <li>
+          <p>Should scale linearly with # of crashes</p>
+        </li>
+      </ul>
+    </li>
+    <li>
+  		<p>JRuby helped:  cut time in half over ruby-1.9.3-p194</p>
+    </li>
+    <li>
+  		<p>Probably some more optimizations possible</p>
+    </li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>MongoDB gotchas</h2>
+  <ul>
+    <li>
+      <p><a href="http://www.mongodb.org/display/DOCS/32+bit" target="_blank">32-bit limitations</a></p>
+    </li>
+    <li>
+      <p><a href="http://www.mongodb.org/display/DOCS/Geospatial+Indexing" target="_blank">$within</a> isn't very good (thanks for the tip, MongoHQ)</p>
+      <ul>
+        <li>
+          <p>20x speed improvement using composite year/lng/lat index over year/2d index</p>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>crashes collection</h2>
+  <pre>
+    <code>
+{
+	"_id" : "MN-0904300482009",
+	"month" : "01",
+	"day" : "17",
+	"year" : "2009",
+	"weekday" : "Saturday",
+	"hour" : "13",
+	"lng" : -93.040428859231,
+	"lat" : 44.9775608967503,
+	"_type" : "MN::Crash",
+	"locrel" : "1",
+	"route_id" : "0462000031",
+	"mile_point" : 6.335
+}
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>clusters collection</h2>
+  <pre>
+    <code>
+{
+	"_id" : ObjectId("50783ed70364ed2eaaf4a4bb"),
+	"lng" : -102.23640813567845,
+	"lat" : 47.83206582914572,
+	"count" : 199,
+	"year" : "2011",
+	"zoom" : 5
+}
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Recording locations of interest (1 of 2)</h2>
+  <h5>
+    <a href="https://developers.google.com/maps/documentation/javascript/overlays#drawing_tools" target="_blank">
+      https://developers.google.com/maps/documentation/javascript/overlays#drawing_tools
+    </a>
+  </h5>
+  <ul>
+    <li>
+      <p>Draw boxes over intersections of interest</p>
+      <pre>
+        <code>
+google.maps.event.addListener(drawingManager, 'rectanglecomplete', function(rectangle) {
+  ...
+  $.ajax({
+    url: "/locations" + locationId,
+    dataType: 'json',
+    type: 'POST',
+    data: {
+      location: location
+    },
+    success: function(response) {
+      rectangle.setOptions({
+        editable: true
+      });
+    }
+  });
+});
+        </code>
+      </pre>
+    </li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Recording locations of interest (2 of 2)</h2>
+    <li>
+      <p>Location save triggers Map Reduce of trends</p>
+      <pre>
+        <code>
+class Location
+  include MongoMapper::Document
+  ...
+  after_save do |location|
+    YearStat.build location
+    MonthStat.build location
+    WeekdayStat.build location
+  end          
+end
+        </code>
+      </pre>
+    </li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Map Reduce for Trends (1 of 2)</h2>
+  <pre>
+    <code>
+class YearStat
+  include MongoMapper::Document
+  
+  key :value, Integer
+  
+  ...
+  
+  def self.map
+    <<-MAP
+      function() {
+        emit({
+          location_id: locationId,
+          label: label,
+          user_id: userId,
+          year: this.year
+        }, 1);
+      }
+    MAP
+  end
+  
+  def self.reduce
+    <<-REDUCE
+      function(key, values) {
+        var sum = 0;
+        values.forEach(function(value) {
+          sum += value;
+        });
+        return sum;
+      }
+    REDUCE
+  end
+  ...
+    </code>
+  </pre>
+</section>
+<section class="slide">
+  <h2>Map Reduce for Trends (2 of 2)</h2>
+  <pre>
+    <code>
+  ...
+  
+  def self.build location
+    Crash.collection.map_reduce(map, reduce, {
+      out: { merge: "year_stats" },
+      scope: { locationId: location.id, label: location.label, userId: location.user.id },
+      query: {
+        lat: { '$gte' => location.sw_lat, '$lte' => location.ne_lat },
+        lng: { '$gte' => location.sw_lng, '$lte' => location.ne_lng }
+      }
+    })
+  end
+  
+  ...
+end
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>year_stats collection</h2>
+  <pre>
+    <code>
+{
+  "_id" : {
+    "location_id" : ObjectId("507a1e3d03643455adbfc6ab"),
+    "label" : "Maryland & Edgerton",
+    "user_id" : ObjectId("505542530364c1e40f9db20d"),
+    "year" : "2011"
+  },
+  "value" : 28
+}
+    </code>
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Yearly trends</h2>
+  <img src="images/maryland-crashes-by-year.png" alt="Year Stats">
+</section>
+
+<section class="slide">
+  <h2>Monthly trends</h2>
+  <img src="images/maryland-crashes-by-month.png" alt="Year Stats">
+</section>
+
+<section class="slide">
+  <h2>Weekday trends</h2>
+  <img src="images/maryland-crashes-by-weekday.png" alt="Year Stats">
+</section>
+
+<section class="slide">
+  <h2>More states (1 of 2)</h2>
+  <h5>
+    North Dakota
+  </h5>
+  <ul>
+    <li>
+      <p>2005-2012</p>
+    </li>
+    <li>
+      <p>Gave me exactly the data I asked for</p>
+    </li>
+    <li>
+      <p>They made me pay ($62.50)</p>
+    </li>
+    <li>
+      <p>Their data is up to date</p>
+    </li>
+    <li>
+      <p>Gave me an Access DB...</p>
+    </li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>More states (2 of 2)</h2>
+  <h5>
+    South Dakota
+  </h5>
+  <ul>
+    <li>
+      <p>2004-2011</p>
+    </li>
+    <li>
+      <p>Also exactly the data I asked for</p>
+    </li>
+    <li>
+      <p>Better than a DVD:  username/password to an FTP site</p>
+    </li>
+    <li>
+      <p>New data every April 15th</p>
+    </li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Deployment</h2>
+  <h5>Heroku</h5>
+  <ul>
+    <li>
+      Used <a href="https://github.com/heroku/heroku-buildpack-ruby" target="_blank">https://github.com/heroku/heroku-buildpack-ruby</a>
+    </li>
+    <li>
+      Bundler 1.2
+    </li>
+  </ul>
+  <pre>
+    <code>
+ruby "1.9.3", :engine => "jruby", :engine_version => "1.7.0"
+    </code>
+  </pre>
+  <h5>Puma</h5>
+  <ul>
+    <li>
+      Because Trinidad was being finicky
+    </li>
+  </ul>
+  <h5>MongoHQ</h5>
+</section>
+
+<section class="slide">
+  <h2><s>BrowserID</s> Persona</h2>
+  <ul>
+    <li>
+      <p></p>
+    </li>
+  </ul>
+</section>
+
+<!-- End slides. -->
+
+<!-- Begin extension snippets. Add or remove as needed. -->
+
+<!-- deck.navigation snippet -->
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<!-- deck.status snippet -->
+<p class="deck-status">
+	<span class="deck-status-current"></span>
+	/
+	<span class="deck-status-total"></span>
+</p>
+
+<!-- deck.goto snippet -->
+<form action="." method="get" class="goto-form">
+	<label for="goto-slide">Go to slide:</label>
+	<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+	<datalist id="goto-datalist"></datalist>
+	<input type="submit" value="Go">
+</form>
+
+<!-- deck.hash snippet -->
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- End extension snippets. -->
+
+
+<!-- Required JS files. -->
+<script src="jquery-1.7.2.min.js"></script>
+<script src="core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="core/deck.core.js"></script>
+<script src="extensions/hash/deck.hash.js"></script>
+<script src="extensions/menu/deck.menu.js"></script>
+<script src="extensions/goto/deck.goto.js"></script>
+<script src="extensions/status/deck.status.js"></script>
+<script src="extensions/navigation/deck.navigation.js"></script>
+<script src="extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck. You can put this in an external file if desired. -->
+<script>
+	$(function() {
+		$.deck('.slide');
+	});
+</script>
+</body>
+</html>
